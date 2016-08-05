@@ -1,0 +1,46 @@
+header {
+	text-align: center;
+	margin-bottom: 20px;
+}
+h1 {
+	background-color: blue;
+	color: white;
+	padding: 10px;
+}
+.main-content {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+}
+.main-content > div {
+	border: 1px solid #333;
+	width: 45%;
+	text-align: center;
+	padding: 0 0 30px 0;
+}
+#TimeRemaining, #BlindsSchedule {
+	font-size: 60px;
+}
+#StartBtn {
+	display: inline-block;
+	font-size: 36px;
+	padding: 20px 30px;
+	vertical-align: middle;
+	border-radius: 6px;
+	background-color: blue;
+	color: white;
+	border: 1px solid #999;
+	cursor: pointer;
+}
+.normal {
+	background-color: white;
+	color: black;
+}
+.flash1 {
+	background-color: red;
+	color: yellow;
+}
+.flash2 {
+	background-color: yellow;
+	color: red;
+}
