@@ -142,9 +142,11 @@ var Controller = {
 		View.bindUIEvents();
 	},
 	start: function() {
-		this.timer = setInterval(function() {
-			Model.updateTimeRemaining();
-		}, 1000);
+		if (!this.timer) {
+			this.timer = setInterval(function() {
+				Model.updateTimeRemaining();
+			}, 1000);
+		}
 	}
 };
 
