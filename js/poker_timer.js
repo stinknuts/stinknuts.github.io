@@ -146,6 +146,11 @@ var Controller = {
 			this.timer = setInterval(function() {
 				Model.updateTimeRemaining();
 			}, 1000);
+			View.dom.startBtn.innerHTML = 'Pause';
+		} else {
+			clearInterval(this.timer);
+			this.timer = undefined;
+			View.dom.startBtn.innerHTML = 'Start';
 		}
 	}
 };
