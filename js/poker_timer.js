@@ -1,15 +1,3 @@
-// A place to display remaining time
-// A place to display blinds
-// An input to set round time. Default to 20 minutes or something.
-// Hardcode blind increments. Maybe in the future add something to set custom blind schedule.
-// A start button. Maybe have a pause button.
-// A reset button.
-
-// When timer gets close to zero, flash and make a sound.
-// When timer gets to zero, make a sound and reset the timer, increase blinds.
-
-// In the future maybe incorporate intermissions.
-
 var CustomEvents = function() {
     var subscribers = {};
     return {
@@ -36,6 +24,42 @@ function zeroPad(num) {
 	return num < 10 ? '0' + num : num;
 }
 
+var Beeper = {
+	audioCtx: new AudioContext(),
+	oscillator: undefined,
+	play: function() {
+		var gainNode = this.audioCtx.createGain	();
+		this.oscillator = this.audioCtx.createOscillator();
+		this.oscillator.connect(gainNode);
+		gainNode.connect(this.audioCtx.destination);
+		this.oscillator.type = 'sine';
+		this.oscillator.frequency.value = 880;
+		this.oscillator.start();
+	},
+	stop: function() {
+		this.oscillator.stop();
+		this.oscillator = undefined;
+	},
+	beep: function() {
+		var self = this;
+		self.play();
+		setTimeout(function() {
+			self.stop();
+		}, 500);
+	},
+	beeps: function(beeps) {
+		var self = this;
+		var times = 0;
+		var intvl = setInterval(function() {
+			times += 1;
+			if (times >= beeps) {
+				clearInterval(intvl);
+			}
+			self.beep();
+		}, 1000);
+	}
+};
+
 var Model =  {
 	events: CustomEvents(),
 	blindsSchedule: [
@@ -45,8 +69,8 @@ var Model =  {
 	],
 	currentBlindIndex: 0,
 	roundTime: {
-		minutes: 25,
-		seconds: 0
+		minutes: 2,
+		seconds: 5
 	},
 	currentRoundTime: {},
 	initializeTimeRemaining: function() {
@@ -74,6 +98,15 @@ var Model =  {
 		if (this.currentRoundTime.minutes <= 1) {
 			this.events.emit('roundEndWarning', this.currentRoundTime);
 		}
+
+		if (this.currentRoundTime.minutes === 2 && this.currentRoundTime.seconds === 0) {
+			this.events.emit('twoMinuteWarning');
+		}
+
+		if (this.currentRoundTime.minutes === 0 && this.currentRoundTime.seconds === 10) {
+			this.events.emit('tenSecondsWarning');
+		}
+
 
 		this.events.emit('timeUpdated', this.currentRoundTime);
 	},
@@ -135,6 +168,8 @@ var Controller = {
 		Model.events.on('blindsIncremented', View.renderBlinds.bind(View));
 		Model.events.on('roundEndWarning', View.flashTimeRemaining.bind(View));
 		Model.events.on('newRoundStarted', View.removeTimeRemainingFlash.bind(View));
+		Model.events.on('twoMinuteWarning', this.twoBeeps.bind(Controller));
+		Model.events.on('tenSecondsWarning', this.tenBeeps.bind(Controller));
 
 		Model.resetCurrentRoundTime();
 		Model.initializeTimeRemaining();
@@ -152,6 +187,12 @@ var Controller = {
 			this.timer = undefined;
 			View.dom.startBtn.innerHTML = 'Start';
 		}
+	},
+	twoBeeps: function() {
+		Beeper.beeps(2);
+	},
+	tenBeeps: function() {
+		Beeper.beeps(10);
 	}
 };
 
