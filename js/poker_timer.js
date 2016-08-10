@@ -69,8 +69,8 @@ var Model =  {
 	],
 	currentBlindIndex: 0,
 	roundTime: {
-		minutes: 2,
-		seconds: 5
+		minutes: 25,
+		seconds: 0
 	},
 	currentRoundTime: {},
 	initializeTimeRemaining: function() {
