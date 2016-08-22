@@ -47,12 +47,12 @@ var Beeper = {
 			self.stop();
 		}, 500);
 	},
-	beeps: function(beeps) {
+	beeps: function(numBeeps) {
 		var self = this;
 		var times = 0;
 		var intvl = setInterval(function() {
 			times += 1;
-			if (times >= beeps) {
+			if (times >= numBeeps) {
 				clearInterval(intvl);
 			}
 			self.beep();
@@ -125,6 +125,16 @@ var Model =  {
 		}
 		this.events.emit('blindsIncremented', this.blindsSchedule[this.currentBlindIndex]);
 	},
+	setRoundTime: function(roundTime) {
+		var roundTime = parseInt(roundTime, 10);
+		if (!isNaN(roundTime)) {
+			this.roundTime = {
+				minutes: roundTime,
+				seconds: 0
+			}
+			this.initializeTimeRemaining();
+		}
+	}
 };
 
 var View = {
@@ -133,9 +143,17 @@ var View = {
 		'timeRemaining': document.querySelector('#TimeRemaining'),
 		'blindsSchedule': document.querySelector('#BlindsSchedule'),
 		'startBtn': document.querySelector('#StartBtn'),
+		'roundTimeInput': document.querySelector('#RoundTime'),
+		'menuBtn': document.querySelector('#MenuBtn'),
+		'menu': document.querySelector('#Menu'),
+		'menuCloseBtn': document.querySelector('#MenuCloseBtn'),
+		'setRoundTimeBtn': document.querySelector('#SetRoundTimeBtn')
 	},
 	bindUIEvents: function() {
 		this.dom.startBtn.addEventListener('click', Controller.start.bind(Controller));
+		this.dom.menuBtn.addEventListener('click', this.openMenu.bind(this));
+		this.dom.menuCloseBtn.addEventListener('click', this.closeMenu.bind(this));
+		this.dom.setRoundTimeBtn.addEventListener('click', Controller.setRoundTime.bind(Controller));
 	},
 	renderTimeRemaining: function(timeRemaining) {
 		this.dom.timeRemaining.innerHTML = timeRemaining.minutes + ':' + zeroPad(timeRemaining.seconds);
@@ -155,6 +173,12 @@ var View = {
 	removeTimeRemainingFlash: function() {
 		this.dom.timeRemainingColumn.classList.remove('flash1');
 		this.dom.timeRemainingColumn.classList.remove('flash2');
+	},
+	openMenu: function() {
+		this.dom.menu.style.display = 'inline-block';
+	},
+	closeMenu: function() {
+		this.dom.menu.style.display = 'none';
 	}
 };
 
@@ -171,6 +195,7 @@ var Controller = {
 		Model.events.on('twoMinuteWarning', this.twoBeeps.bind(Controller));
 		Model.events.on('tenSecondsWarning', this.tenBeeps.bind(Controller));
 
+		Model.setRoundTime(View.dom.roundTimeInput.value);
 		Model.resetCurrentRoundTime();
 		Model.initializeTimeRemaining();
 		Model.initializeBlinds();
@@ -193,6 +218,11 @@ var Controller = {
 	},
 	tenBeeps: function() {
 		Beeper.beeps(10);
+	},
+	setRoundTime: function() {
+		View.closeMenu();
+		var roundTime = View.dom.roundTimeInput.value;
+		Model.setRoundTime(roundTime);
 	}
 };
 

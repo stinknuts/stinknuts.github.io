@@ -5,10 +5,20 @@
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
+	<div id="Menu">
+		<div id="MenuCloseBtn">x</div>
+		<div>
+			<span>Round Time:</span> <input type="text" size="3" id="RoundTime" />
+		</div>
+		<button id="SetRoundTimeBtn">Set</button>
+	</div>
 	<header>
 		<h1>Poker Timer</h1>
-		<div id="StartBtn">Start</div>
+		<div class="hamburger-container" id="MenuBtn"><div class="hamburger"></div></div>
 	</header>
+	<div class="top-content">
+		<div id="StartBtn">Start</div>
+	</div>
 	<div class="main-content">
 		<div id="TimeRemainingCol" class="left-col">
 			<header>

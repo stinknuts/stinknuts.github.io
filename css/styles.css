@@ -1,12 +1,64 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
 header {
 	text-align: center;
 	margin-bottom: 20px;
 	font-family: Arial, sans-serif;
+	position: relative;
 }
 h1 {
 	background-color: blue;
 	color: white;
 	padding: 30px 0;
+	margin: 0;
+}
+.hamburger-container {
+	position: absolute;
+	right: 12px;
+	top: 12px;
+	display: inline-block;
+	width: 20px;
+	height: 13px;
+	cursor: pointer;
+}
+.hamburger {
+	width: 100%;
+	background-color: white;
+	height: 3px;
+	box-shadow: 0 5px white,
+				0 10px white;
+}
+#Menu {
+	display: none;
+	position: absolute;
+	z-index: 2;
+	right: 0;
+	width: 300px;
+	height: 100px;
+	border: 1px solid #999;
+	border-radius: 4px;
+	background-color: white;
+	box-shadow: 2px 2px 2px #333;
+	margin: 10px;
+	padding: 10px;
+}
+#MenuCloseBtn {
+	font-family: Arial, sans-serif;
+	position: absolute;
+	right: 3px;
+	top: 3px;
+	border: 1px solid #999;
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 2px 5px;
+	background-color: #eee;
+}
+#SetRoundTimeBtn {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
 }
 .main-content {
 	width: 100%;
@@ -18,6 +70,13 @@ h1 {
 	width: 45%;
 	text-align: center;
 	padding: 0 0 30px 0;
+}
+.top-content {
+	text-align: center;
+	margin: 0 0 20px 0;
+}
+#RoundTime {
+	width: 20px;
 }
 #TimeRemaining, #BlindsSchedule {
 	font-size: 60px;
